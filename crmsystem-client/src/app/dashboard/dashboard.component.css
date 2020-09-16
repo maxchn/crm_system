@@ -1,0 +1,27 @@
+.birthDayNotification {
+  border-left: 4px solid rgb(15, 209, 15);
+}
+
+.taskNotification {
+  border-left: 4px solid orange;
+}
+
+.companyNotification {
+  border-left: 4px solid rgb(25, 173, 218);
+}
+
+.privateNotification {
+  border-left: 4px solid rgb(218, 215, 25);
+}
+
+.custom-badge {
+  padding: 3px 7px;
+  background: rgb(80, 80, 80);
+  color: white;
+  border-radius: 5px;
+  float: right;
+}
+
+.spinner-center {
+  margin: 0 auto;
+}

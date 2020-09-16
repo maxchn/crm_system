@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>Создание нового чата</h1>
+<hr />
+<form [formGroup]="createChatForm" autocomplete="off" novalidate>
+  <div mat-dialog-content>
+    <mat-form-field class="full-width">
+      <input matInput type="text" placeholder="Название чата" formControlName="name" name="name" id="name" required />
+      <mat-error *ngIf="hasError('name', 'required')">Поле обязательное</mat-error>
+      <mat-error *ngIf="hasError('name', 'maxlength')">Максимальное количество символов 120!</mat-error>
+    </mat-form-field>
+  </div>
+  <div class="form-group text-right">
+    <button mat-button (click)="onCancelClick()">Отмена</button>
+    <button mat-raised-button color="primary" [disabled]="!createChatForm.valid" (click)="createChat()">Создать</button>
+  </div>
+</form>

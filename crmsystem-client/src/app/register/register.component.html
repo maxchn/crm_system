@@ -1,0 +1,66 @@
+<mat-card class="example-card">
+  <mat-card-header>
+    <mat-card-title>Регистрация</mat-card-title>
+  </mat-card-header>
+
+  <form class="example-form" [formGroup]="registerForm" autocomplete="off" novalidate (ngSubmit)="signUp()"
+    fxLayout="column wrap">
+    <mat-card-content>
+      <table class="example-full-width" cellspacing="0">
+        <tr>
+          <td>
+            <mat-form-field class="example-full-width">
+              <input matInput type="email" placeholder="E-mail" formControlName="login" name="login" id="login"
+                required />
+              <mat-error *ngIf="hasError('login', 'required')">Введите e-mail</mat-error>
+              <mat-error *ngIf="hasError('login', 'pattern')">Введите корректный e-mail</mat-error>
+            </mat-form-field>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <mat-form-field class="example-full-width">
+              <input matInput [type]="hide ? 'password' : 'text'" placeholder="Пароль" formControlName="password"
+                name="password" id="password" autocomplete="off" required />
+              <button mat-button *ngIf="model.password" matSuffix mat-icon-button aria-label="Clear"
+                (click)="model.password=''">
+                <mat-icon>close</mat-icon>
+              </button>
+              <mat-error *ngIf="hasError('password', 'required')">Поле обязательное</mat-error>
+              <mat-error *ngIf="hasError('password', 'pattern')">
+                Пароль должен содержать буквы в верхнем и нижнем регистре, числа и разрешенные символы (!@#$%^&*). И
+                иметь длину
+                не меньше 8 символов.
+              </mat-error>
+            </mat-form-field>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <mat-form-field class="example-full-width">
+              <input matInput [type]="hide ? 'password' : 'text'" placeholder="Подтвердите пароль"
+                formControlName="confirmPassword" name="confirmPassword" id="confirmPassword" autocomplete="off"
+                required />
+              <button mat-button *ngIf="model.confirmPassword" matSuffix mat-icon-button aria-label="Clear"
+                (click)="model.confirmPassword=''">
+                <mat-icon>close</mat-icon>
+              </button>
+              <mat-error
+                *ngIf="hasError('confirmPassword', 'ConfirmPassword') || hasError('confirmPassword', 'required')">
+                Пароли не совпадают
+              </mat-error>
+            </mat-form-field>
+          </td>
+        </tr>
+      </table>
+    </mat-card-content>
+
+    <mat-card-actions class="text-center">
+      <button mat-raised-button color="primary" [disabled]="!registerForm.valid"
+        class="full-width">Зарегистрироваться</button>
+    </mat-card-actions>
+  </form>
+</mat-card>
+<mat-card class="example-card mt-4 text-center">
+  Уже зарегистрированы? <a [routerLink]="'/login'">Войдите</a>
+</mat-card>

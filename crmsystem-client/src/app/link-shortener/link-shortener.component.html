@@ -1,0 +1,96 @@
+<button mat-raised-button color="primary" class="mb-4" (click)="showCreateShortLink()">Сократить ссылку</button>
+
+<mat-tab-group>
+  <mat-tab label="Мои">
+    <div class="example-container mat-elevation-z8">
+      <div class="example-table-container">
+        <table mat-table [dataSource]="userLinks">
+          <!-- Full Link -->
+          <ng-container matColumnDef="fullLink">
+            <th mat-header-cell *matHeaderCellDef>Полный URL</th>
+            <td mat-cell *matCellDef="let link" class="long-link-col">
+              <button mat-icon-button aria-label="Copy to clipboard" (click)="copyToClipboard(link.full)" class="mr-2"
+                style="display: inline-block" matTooltip="Скопировать в буфер обмена">
+                <mat-icon>link</mat-icon>
+              </button>
+              <span matTooltip="{{link.full}}" class="long-link-text">{{link.full}}</span>
+            </td>
+          </ng-container>
+
+          <!-- Short Link -->
+          <ng-container matColumnDef="shortLink">
+            <th mat-header-cell *matHeaderCellDef>Сокращенный URL</th>
+            <td mat-cell *matCellDef="let link" class="long-link-col">
+              <button mat-icon-button aria-label="Copy to clipboard" (click)="copyToClipboard(link.short)" class="mr-2"
+                style="display: inline-block" matTooltip="Скопировать в буфер обмена">
+                <mat-icon>link</mat-icon>
+              </button>
+              <span matTooltip="{{link.short}}" class="long-link-text">{{link.short}}</span>
+            </td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Действия</th>
+            <td mat-cell *matCellDef="let link">
+              <a mat-mini-fab color="warn" (click)="deleteLink(link.shortLinkId)" matTooltip="Удалить">
+                <mat-icon>delete</mat-icon>
+              </a>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="allDisplayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: allDisplayedColumns;">
+        </table>
+      </div>
+
+      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [length]="userLinksLength"></mat-paginator>
+    </div>
+  </mat-tab>
+  <mat-tab label="Общие">
+    <div class="example-container mat-elevation-z8">
+      <div class="example-table-container">
+        <table mat-table [dataSource]="companyLinks">
+          <!-- Full Link -->
+          <ng-container matColumnDef="fullLink">
+            <th mat-header-cell *matHeaderCellDef>Полный URL</th>
+            <td mat-cell *matCellDef="let link" class="long-link-col">
+              <button mat-icon-button aria-label="Copy to clipboard" (click)="copyToClipboard(link.full)" class="mr-2"
+                style="display: inline-block" matTooltip="Скопировать в буфер обмена">
+                <mat-icon>link</mat-icon>
+              </button>
+              <span matTooltip="{{link.full}}" class="long-link-text">{{link.full}}</span>
+            </td>
+          </ng-container>
+
+          <!-- Short Link -->
+          <ng-container matColumnDef="shortLink">
+            <th mat-header-cell *matHeaderCellDef>Сокращенный URL</th>
+            <td mat-cell *matCellDef="let link" class="long-link-col">
+              <button mat-icon-button aria-label="Copy to clipboard" (click)="copyToClipboard(link.short)" class="mr-2"
+                style="display: inline-block" matTooltip="Скопировать в буфер обмена">
+                <mat-icon>link</mat-icon>
+              </button>
+              <span matTooltip="{{link.short}}" class="long-link-text">{{link.short}}</span>
+            </td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Действия</th>
+            <td mat-cell *matCellDef="let link">
+              <a mat-mini-fab color="warn" (click)="deleteLink(link.shortLinkId)" matTooltip="Удалить">
+                <mat-icon>delete</mat-icon>
+              </a>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="allDisplayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: allDisplayedColumns;">
+        </table>
+      </div>
+
+      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [length]="companyLinksLength"></mat-paginator>
+    </div>
+  </mat-tab>
+</mat-tab-group>

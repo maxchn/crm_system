@@ -1,0 +1,58 @@
+<div style="position:relative;">
+  <span mat-dialog-title>Настройки чата</span>
+  <button mat-icon-button aria-label="Close" style="position:absolute;right:0;top:-5px;" (click)="onCloseClick()">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+<hr />
+<div mat-dialog-content>
+  <mat-tab-group>
+    <mat-tab label="Основные">
+      <form [formGroup]="changeChatform" autocomplete="off" novalidate (ngSubmit)="changeChatData()" class="mt-3">
+        <mat-form-field class="full-width">
+          <input matInput type="text" placeholder="Название чата" formControlName="chatName" name="chatName"
+            id="chatName" required />
+          <mat-error *ngIf="hasError('chatName', 'required')">Поле обязательное</mat-error>
+          <mat-error *ngIf="hasError('chatName', 'maxlength')">Максимальное количество символов 120!</mat-error>
+        </mat-form-field>
+        <div class="form-group text-right">
+          <button mat-raised-button color="primary" [disabled]="!changeChatform.valid">Изменить</button>
+        </div>
+      </form>
+    </mat-tab>
+    <mat-tab label="Участники">
+      <mat-form-field class="full-width mt-2">
+        <input matInput placeholder="Сотрудники" aria-label="Сотрудники" [formControl]="employeeCtrl"
+          [matAutocomplete]="auto" />
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectedEmployeeEvent($event)">
+          <mat-option *ngFor="let employee of filteredEmployees | async" [value]="employee.id">
+            {{employee.lastName}} {{employee.firstName}} {{employee.patronymic}}
+
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <div style="position: relative; height: 40px;">
+        <button mat-raised-button color="warn" (click)="leaveFromChat()"
+          style="display:inline-block;position:absolute;left:0;top:5px;">
+          <mat-icon>exit_to_app</mat-icon>Покинуть чат
+        </button>
+        <button mat-raised-button color="primary" (click)="addSelectEmployeeToChat()"
+          style="display:inline-block;position:absolute;right:0;top:5px;">
+          <mat-icon>add</mat-icon>Добавить
+        </button>
+      </div>
+
+      <h4 class="mt-3">Список участников</h4>
+      <mat-list role="list" style="position: relative">
+        <mat-list-item role="listitem" *ngFor="let participant of chatParticipants">{{participant.LastName}}
+          {{participant.FirstName}} {{participant.Patronymic}}
+          <button mat-icon-button color="warn" aria-label="Удалить" class="rmv-btn"
+            (click)="removeParticipantFromChat(participant)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-list-item>
+      </mat-list>
+    </mat-tab>
+  </mat-tab-group>
+</div>

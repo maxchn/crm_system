@@ -1,0 +1,25 @@
+<!-- <div *ngIf="googleCalendarService.user$ | async as user">
+  <h3>Logged in as {{ user.displayName }}</h3>
+  <img src="{{ user.photoURL }}" width="50px">
+  <button mat-raised-button color="primary" (click)=" googleCalendarService.logout()">Logout</button>
+
+  <button mat-raised-button color="primary" (click)="googleCalendarService.getCalendar()">Get Google Calendar</button>
+  <button mat-raised-button color="primary" (click)="googleCalendarService.insertEvent()">Add Event</button>
+
+  <div *ngFor="let item of googleCalendarService.calendarItems">
+    <h3>{{ item.summary }} - {{ item.status }}</h3>
+    <p><em>Created {{ item.created }}</em></p>
+    <p>{{ item.description }}</p>
+  </div>
+</div>
+
+<button (click)="googleCalendarService.login()" class="button is-danger">Login with Google
+</button> -->
+
+<div class="calendar-container">
+  <full-calendar [plugins]="calendarPlugins" locale="ru" [firstDay]="1" [buttonText]="buttonText" eventTextColor="#ffffff"
+    [header]="buttonsSettings" height="parent" [selectable]="true" [editable]="true" [events]="calendarEvents"
+    deepChangeDetection="true" allDayText="Весь день" (select)="datesSelect($event)" (eventClick)="eventClick($event)"
+    (eventResize)="eventResize($event)" (eventDrop)="eventDrop($event)">
+  </full-calendar>
+</div>

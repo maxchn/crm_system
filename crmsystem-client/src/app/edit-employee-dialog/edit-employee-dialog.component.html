@@ -1,0 +1,8 @@
+<div style="position:relative;">
+  <span mat-dialog-title>Редактирование данных сотрудника</span>
+  <button mat-icon-button aria-label="Close" style="position:absolute;right:0;top:-5px;" (click)="onCloseClick()">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<app-change-personal-data [employeeId]="employeeId" (updateUserData)="changeProfile($event)"></app-change-personal-data>

@@ -1,0 +1,22 @@
+<h1 mat-dialog-title>Редактирование события</h1>
+<hr />
+<form [formGroup]="editEventForm" autocomplete="off" novalidate>
+  <div mat-dialog-content>
+    <mat-form-field class="full-width">
+      <input matInput type="text" placeholder="Название" formControlName="title" name="title" id="title" required />
+      <mat-error *ngIf="hasError('title', 'required')">Поле обязательное</mat-error>
+      <mat-error *ngIf="hasError('title', 'maxlength')">Максимальное количество символов 120</mat-error>
+    </mat-form-field>
+  </div>
+  <div class="form-group text-right buttons-group">
+    <button mat-button (click)="onCloseClick()">Закрыть</button>
+    <button mat-raised-button color="primary" [disabled]="!editEventForm.valid" (click)="editCalendarEvent()">
+      <mat-icon aria-hidden="false" aria-label="Icon">edit</mat-icon>
+      Изменить
+    </button>
+    <button mat-raised-button color="warn" [disabled]="!editEventForm.valid" (click)="removeCalendarEvent()">
+      <mat-icon aria-hidden="false" aria-label="Icon">delete</mat-icon>
+      Удалить
+    </button>
+  </div>
+</form>

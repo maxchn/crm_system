@@ -1,0 +1,24 @@
+<h1 mat-dialog-title>Переименовывание</h1>
+<hr />
+<form [formGroup]="renameFileForm" autocomplete="off" novalidate>
+  <div mat-dialog-content>
+    <mat-form-field class="full-width mb-4">
+      <input matInput type="text" placeholder="Новое название" formControlName="fileName" name="fileName" id="fileName"
+        required />
+      <mat-error *ngIf="hasError('fileName', 'required')">Поле обязательное</mat-error>
+      <mat-error *ngIf="hasError('fileName', 'maxlength')">Максимальное количество символов 120!</mat-error>
+      <mat-error *ngIf="hasError('fileName', 'pattern')">Название не должно содержать следующие запрещенные символы:
+        <br /> <strong> / \ : \ * ? " &lt; &gt; \ |</strong>
+      </mat-error>
+      <mat-error *ngIf="hasError('fileName', 'dublicate')">Файл с указанным именем уже существует
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div class="form-group text-right">
+    <button mat-button (click)="onCancelClick()">Отмена</button>
+    <button mat-raised-button color="primary" [disabled]="!renameFileForm.valid" (click)="renameFile()">
+      <mat-icon aria-hidden="false" aria-label="Icon">edit</mat-icon>
+      Переименовать
+    </button>
+  </div>
+</form>

@@ -1,0 +1,18 @@
+<h1 mat-dialog-title>Создание нового события</h1>
+<hr />
+<form [formGroup]="createEventForm" autocomplete="off" novalidate>
+  <div mat-dialog-content>
+    <mat-form-field class="full-width">
+      <input matInput type="text" placeholder="Название" formControlName="title" name="title" id="title" required />
+      <mat-error *ngIf="hasError('title', 'required')">Поле обязательное</mat-error>
+      <mat-error *ngIf="hasError('title', 'maxlength')">Максимальное количество символов 120</mat-error>
+    </mat-form-field>
+  </div>
+  <div class="form-group text-right">
+    <button mat-button (click)="onCloseClick()">Закрыть</button>
+    <button mat-raised-button color="primary" [disabled]="!createEventForm.valid" (click)="createCalendarEvent()">
+      <mat-icon aria-hidden="false" aria-label="Icon">add</mat-icon>
+      Добавить
+    </button>
+  </div>
+</form>

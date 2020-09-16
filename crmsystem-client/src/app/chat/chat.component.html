@@ -1,0 +1,91 @@
+<div class="container-fluid">
+  <div class="messaging">
+    <div class="inbox_msg">
+      <div class="inbox_people">
+        <div class="headind_srch">
+          <div class="recent_heading">
+            <h4>Список чатов</h4>
+          </div>
+          <div class="srch_bar">
+            <button mat-raised-button color="primary" (click)="showCreateChatDialog()">
+              <mat-icon aria-hidden="false" aria-label="Icon">add</mat-icon>
+              Создать чат
+            </button>
+          </div>
+        </div>
+        <div class="inbox_chat">
+          <mat-nav-list>
+            <mat-list-item *ngFor="let chat of chats" [ngClass]="getChatItemClass(chat)" (click)="selectChat(chat)">
+              {{chat.name}}
+            </mat-list-item>
+          </mat-nav-list>
+        </div>
+      </div>
+      <div class="mesgs">
+        <div class="headind_srch" style="position:relative;">
+          <div class="ml-2">
+            <mat-checkbox [hidden]="selectedChat == null" [checked]="selectionMode"
+              (change)="checkClick($event.checked)">
+              Выбрать сообщения
+              <span [hidden]="selectedMessages.length == 0" class="ml-3">[{{selectedMessages.length}}] выбранно</span>
+            </mat-checkbox>
+          </div>
+          <div class="example-button-row mb-1" style="position:absolute;right:5px;top:10px">
+            <button mat-raised-button color="primary" (click)="removeSelectedImages()"
+              [hidden]="selectedMessages.length == 0">
+              <mat-icon aria-hidden="false" aria-label="Icon">delete</mat-icon>
+              Удалить
+            </button>
+            <button mat-raised-button color="primary" (click)="showChatSettingsDialog()"
+              [hidden]="selectedChat == null">
+              <mat-icon aria-hidden="false" aria-label="Icon">settings</mat-icon>
+              Настройки
+            </button>
+          </div>
+        </div>
+        <div class="msg_history" #scrollContainer>
+          <h3 *ngIf="chatMessages.length == 0" class="text-center">Нет сообщений</h3>
+          <div *ngFor="let message of chatMessages">
+            <div *ngIf="message.senderId == currentUserId; then ifAsAuthor; else ifNoAsAuthor"></div>
+            <ng-template #ifAsAuthor>
+              <div class="outgoing_msg" (click)="messageClick(message)" [ngClass]="getChatMessageClass(message)">
+                <div class="sent_msg">
+                  <p>{{message.text}}</p>
+                  <span class="time_date_right">{{message.sender}} | {{parseDateTime(message.dateTime)}}</span>
+                </div>
+              </div>
+            </ng-template>
+            <ng-template #ifNoAsAuthor>
+              <div class="incoming_msg mt-2" (click)="messageClick(message)" [ngClass]="getChatMessageClass(message)">
+                <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil">
+                </div>
+                <div class="received_msg">
+                  <div class="received_withd_msg">
+                    <p>{{message.text}}</p>
+                    <span class="time_date">{{message.sender}} | {{parseDateTime(message.dateTime)}}</span>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </div>
+          <!-- </div> -->
+        </div>
+        <div class="type_msg">
+          <div class="input_msg_write">
+            <form [formGroup]="chatForm" autocomplete="off" novalidate>
+              <mat-form-field class="full-width mt-2 pl-1 pr-1" style="margin: 0">
+                <textarea formControlName="message" matInput placeholder="Введите сообщение"
+                  style="height: 100px;min-height: 70px; max-height: 70px;"></textarea>
+                <!-- <mat-error *ngIf="hasError('message', 'required')">Поле обязательное</mat-error> -->
+              </mat-form-field>
+              <button mat-mini-fab aria-label="Send" style="position: absolute; right: 0;top: 20px;"
+                (click)="sendMessage()" [disabled]="!chatForm.valid">
+                <mat-icon>send</mat-icon>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

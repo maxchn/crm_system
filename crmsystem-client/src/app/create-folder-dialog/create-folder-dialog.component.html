@@ -1,0 +1,22 @@
+<h1 mat-dialog-title>Создание новой папки</h1>
+<hr />
+<form [formGroup]="createFolderForm" autocomplete="off" novalidate>
+  <div mat-dialog-content>
+    <mat-form-field class="full-width mb-3">
+      <input matInput type="text" placeholder="Название папки" formControlName="folderName" name="folderName"
+        id="folderName" required />
+      <mat-error *ngIf="hasError('folderName', 'required')">Поле обязательное</mat-error>
+      <mat-error *ngIf="hasError('folderName', 'maxlength')">Максимальное количество символов 120!</mat-error>
+      <mat-error *ngIf="hasError('folderName', 'pattern')">Название не должно содержать следующие запрещенные символы:
+        <br /> <strong> / \ : \ * ? " &lt; &gt; \ |</strong></mat-error>
+      <mat-error *ngIf="hasError('folderName', 'dublicate')">Папка с таким именем уже существует</mat-error>
+    </mat-form-field>
+  </div>
+  <div class="form-group text-right">
+    <button mat-button (click)="onCloseClick()">Закрыть</button>
+    <button mat-raised-button color="primary" [disabled]="!createFolderForm.valid" (click)="createFolder()">
+      <mat-icon aria-hidden="false" aria-label="Icon">add</mat-icon>
+      Создать
+    </button>
+  </div>
+</form>

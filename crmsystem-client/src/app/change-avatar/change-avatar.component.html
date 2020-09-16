@@ -1,0 +1,23 @@
+<mat-card>
+  <mat-card-header>
+    <h4>Аватар</h4>
+  </mat-card-header>
+
+  <div class="col-md-12 text-center">
+    <img [src]="imgURL" class="responsive-img" alt="Avatar" *ngIf="imgURL" />
+  </div>
+  <form [formGroup]="form" autocomplete="off" novalidate>
+    <div class="col-md-12 text-center mt-3">
+      <span class="text-danger" *ngIf="errorMessage">{{errorMessage}}</span>
+      <section class="example-section">
+        <mat-progress-bar class="example-margin" color="primary" mode="determinate" [value]="progressValue">
+        </mat-progress-bar>
+      </section>
+      <input formControlName="avatar" type="file" name="avatar" accept='image/*' class="mt-2 mb-3"
+        (change)="preview($event)" data-button-title="Выберите аватар" />
+    </div>
+  </form>
+  <div class="col-md-12 text-right">
+    <button mat-raised-button color="primary" (click)="changeAvatar()">Обновить</button>
+  </div>
+</mat-card>

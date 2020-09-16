@@ -1,0 +1,175 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 mb-3">
+      <button mat-stroked-button routerLink="/task/index">
+        Назад
+      </button>
+    </div>
+    <div class="col-md-10 offset-md-1">
+      <hr />
+      <dl>
+        <dt>
+          Название
+        </dt>
+        <dd class="pl-3">
+          {{ model.name }}
+        </dd>
+        <dt>
+          Подробное описание
+        </dt>
+        <dd class="pl-3">
+          <div [innerHTML]="model.body"></div>
+        </dd>
+        <dt>
+          Дата создания
+        </dt>
+        <dd class="pl-3">
+          {{  formatDate(model.createdDate) }}
+        </dd>
+        <dt>
+          Конечный срок выполнения
+        </dt>
+        <dd class="pl-3">
+          {{ formatDate(model.deadline) }}
+        </dd>
+        <dt>
+          Это важная задача?
+        </dt>
+        <dd class="pl-3">
+          <div *ngIf="model.isImportant; then ifImportant; else ifNoImportant"></div>
+          <ng-template #ifImportant>Да</ng-template>
+          <ng-template #ifNoImportant>Нет</ng-template>
+        </dd>
+        <dt>
+          Затраченное время на выполнение
+        </dt>
+        <dd class="pl-3">
+          {{ formatTime(model.totalTime) }} мин.
+        </dd>
+        <dt>
+          Ответственные за выполнение
+        </dt>
+        <dd class="pl-3">
+          <div
+            *ngIf="model.responsiblesForExecution && model.responsiblesForExecution.length > 0; then ifResponsiblesForExecution; else ifNoResponsiblesForExecution">
+          </div>
+          <ng-template #ifResponsiblesForExecution>
+            <mat-chip-list aria-label="Ответственные за выполнение">
+              <mat-chip *ngFor="let employee of model.responsiblesForExecution">{{employee.user.lastName}}
+                {{employee.user.firstName}} {{employee.user.patronymic}}</mat-chip>
+            </mat-chip-list>
+          </ng-template>
+          <ng-template #ifNoResponsiblesForExecution>Нет елементов</ng-template>
+        </dd>
+        <dt>
+          Соисполнители
+        </dt>
+        <dd class="pl-3">
+          <div *ngIf="model.coExecutors && model.coExecutors.length > 0; then ifCoExecutors; else ifNoCoExecutors">
+          </div>
+          <ng-template #ifCoExecutors>
+            <mat-chip-list aria-label="Соисполнители">
+              <mat-chip *ngFor="let employee of model.coExecutors">
+                {{employee.user.lastName}} {{employee.user.firstName}} {{employee.user.patronymic}}
+              </mat-chip>
+            </mat-chip-list>
+          </ng-template>
+          <ng-template #ifNoCoExecutors>Нет елементов</ng-template>
+        </dd>
+        <dt>
+          Наблюдатели
+        </dt>
+        <dd class="pl-3">
+          <div *ngIf="model.observers && model.observers.length > 0; then ifObservers; else ifNoObservers">
+          </div>
+          <ng-template #ifObservers>
+            <mat-chip-list aria-label="Соисполнители">
+              <mat-chip *ngFor="let employee of model.observers">
+                {{employee.user.lastName}} {{employee.user.firstName}} {{employee.user.patronymic}}
+              </mat-chip>
+            </mat-chip-list>
+          </ng-template>
+          <ng-template #ifNoObservers>Нет елементов</ng-template>
+        </dd>
+        <dt>
+          Теги
+        </dt>
+        <dd class="pl-3">
+          <div *ngIf="model.taskTags && model.taskTags.length > 0; then ifTaskTags; else ifNoTaskTags">
+          </div>
+          <ng-template #ifTaskTags>
+            <mat-chip-list aria-label="Теги">
+              <mat-chip *ngFor="let taskTag of model.taskTags">{{taskTag.tag.name}}</mat-chip>
+            </mat-chip-list>
+          </ng-template>
+          <ng-template #ifNoTaskTags>Нет тегов</ng-template>
+        </dd>
+        <dt>
+          Прикрепленные файлы
+        </dt>
+        <dd class="pl-3">
+          <mat-list role="list">
+            <mat-list-item role="listitem" *ngFor="let file of attachedFiles">
+              <button mat-icon-button aria-label="Download" matTooltip="Скачать" (click)="downloadAttachedFile(file)">
+                <mat-icon>cloud_download</mat-icon>
+              </button>
+              {{file.name}}
+            </mat-list-item>
+          </mat-list>
+        </dd>
+      </dl>
+      <hr />
+    </div>
+    <div class="col-md-10 offset-md-1">
+      <div class="example-button-row">
+        <button mat-raised-button *ngIf="model.finalPerformerId == null" color="primary"
+          (click)="goToEdit()">Редактировать</button>
+        <button mat-raised-button *ngIf="model.finalPerformerId == null" color="primary"
+          (click)="clickExecution()">{{runButtonText}}</button>
+        <button mat-raised-button *ngIf="model.finalPerformerId == null" color="accent"
+          (click)="markCompleted()">Завершить</button>
+        <button mat-raised-button *ngIf="reopenTaskAccess" color="warn" (click)="reopenTask()">Открыть заново</button>
+      </div>
+      <hr />
+    </div>
+    <div class="col-md-10 offset-md-1">
+      <form [formGroup]="commentForm" autocomplete="off" novalidate (ngSubmit)="addComment()" class="mt-3">
+        <mat-form-field class="full-width">
+          <textarea matInput formControlName="text" placeholder="Комментарий"></textarea>
+          <mat-error *ngIf="hasError('text', 'required')">Поле обязательное</mat-error>
+          <mat-error *ngIf="hasError('text', 'maxLength')">Максимальное количество символов 512</mat-error>
+        </mat-form-field>
+        <div class="form-group text-right">
+          <button mat-raised-button color="primary" [disabled]="!commentForm.valid">Добавить</button>
+        </div>
+      </form>
+    </div>
+    <div class="col-md-10 offset-md-1">
+      <h4>Комментарии</h4>
+      <p *ngIf="taskComments.length == 0" class="mt-2 mb-5 text-center">Нет коментариев</p>
+      <mat-card *ngFor="let comment of taskComments" class="full-width mb-3">
+        <div class="row">
+          <div class="col-md-auto">
+            <img alt="Avatar" src="assets/images/default-avatar.png" class="comment-avatar" />
+          </div>
+          <div class="col comment-body">
+            <span class="mat-caption comment-header ">{{comment.author.lastName}} {{comment.author.firstName}}
+              {{comment.author.patronymic}}</span>
+            <span class="comment-date mat-caption comment-header ">{{ formatDate(comment.date) }}</span>
+            <p class="comment-body">{{comment.text}}</p>
+
+            <div class="text-right">
+              <button mat-raised-button color="warn" (click)="deleteComment(comment)"
+                *ngIf="comment.isAccessOnDeleting">
+                <mat-icon aria-hidden="false" aria-label="Icon">delete</mat-icon>
+                Удалить
+              </button>
+            </div>
+          </div>
+        </div>
+        <div>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+</div>

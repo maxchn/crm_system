@@ -1,0 +1,25 @@
+<div class="container">
+  <div class="row">
+    <mat-horizontal-stepper [linear]="true" [selectedIndex]="1" #stepper>
+      <mat-step [completed]="true" [editable]="false">
+        <ng-template matStepLabel>Базовая регистрация</ng-template>
+      </mat-step>
+      <mat-step [completed]="false">
+        <ng-template matStepLabel>Заполнение профиля</ng-template>
+        <div class="col-md-6 offset-md-3">
+          <app-change-personal-data (updateUserData)="changeProfile($event)"></app-change-personal-data>
+        </div>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>Финиш</ng-template>
+        <div class="col-md-4 offset-md-4">
+          Полная регистрация прошла успешно
+          <div>
+            <button mat-button matStepperPrevious>Назад</button>
+            <button mat-button (click)="goToDashboard()">Начать работу</button>
+          </div>
+        </div>
+      </mat-step>
+    </mat-horizontal-stepper>
+  </div>
+</div>

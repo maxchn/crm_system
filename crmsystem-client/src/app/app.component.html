@@ -1,0 +1,32 @@
+<app-loader></app-loader>
+
+<div *ngIf="isAuthorized(); then ifAuthorized; else ifNoAuthorized"></div>
+<ng-template #ifAuthorized>
+  <mat-sidenav-container fullscreen>
+    <mat-sidenav [mode]="isLargeScreen() ? 'side' : 'over'" #sidenav [opened]="isLargeScreen()" position="start">
+      <ng-material-multilevel-menu [items]='appitems' (selectedItem)="selectedItem($event)">
+      </ng-material-multilevel-menu>
+    </mat-sidenav>
+    <mat-sidenav-content class="sidenav-content" style="overflow: hidden;">
+      <mat-toolbar color="primary">
+        <button mat-icon-button (click)="sidenav.toggle()">
+          <mat-icon>menu</mat-icon>
+        </button>
+        <span class="ml-2">{{ pageTitle }}</span>
+        <span class="toolbar-spacer"></span>
+      </mat-toolbar>
+      <div class="main-content">
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</ng-template>
+<ng-template #ifNoAuthorized>
+  <div class="container h-100">
+    <div class="row h-100 justify-content-center align-items-center">
+      <div class="col-auto">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
+</ng-template>

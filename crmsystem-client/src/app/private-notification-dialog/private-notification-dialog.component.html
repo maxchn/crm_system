@@ -1,0 +1,23 @@
+<div style="position:relative;">
+  <span mat-dialog-title>Приватное сообщение</span>
+  <button mat-icon-button aria-label="Close" style="position:absolute;right:0;top:-5px;" (click)="onCloseClick()">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+<hr />
+<div class="private-message-container">
+  <p>Сообщение <span class="text-danger">*</span></p>
+  <ckeditor #bodyEditor [editor]="Editor" [data]="body"></ckeditor>
+  <p class="mt-2 mb-0">Получатели <span class="text-danger">*</span></p>
+  <mat-selection-list #employeesList>
+    <mat-list-option *ngFor="let employee of employees" [value]="employee" [selected]="isSelectedEmployee(employee.id)">
+      {{employee.lastName}} {{employee.lastName}} {{employee.firstName}} {{employee.patronymic}}
+    </mat-list-option>
+  </mat-selection-list>
+</div>
+<div class="text-right">
+  <button mat-raised-button color="primary" (click)="makeAction(employeesList.selectedOptions.selected)">
+    <mat-icon aria-hidden="false" aria-label="Icon">{{buttonIcon}}</mat-icon>
+    {{buttonText}}
+  </button>
+</div>

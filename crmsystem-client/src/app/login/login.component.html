@@ -1,0 +1,40 @@
+<mat-card class="example-card">
+  <mat-card-header>
+    <mat-card-title>Вход</mat-card-title>
+  </mat-card-header>
+
+  <form class="example-form" [formGroup]="loginForm" autocomplete="off" novalidate (ngSubmit)="signIn()"
+    fxLayout="column wrap">
+    <mat-card-content>
+      <table class="example-full-width" cellspacing="0">
+        <tr>
+          <td>
+            <mat-form-field class="example-full-width">
+              <input matInput type="email" placeholder="E-mail" formControlName="login" name="login" id="login"
+                required />
+              <mat-error *ngIf="hasError('login', 'required')">Введите e-mail</mat-error>
+              <mat-error *ngIf="hasError('login', 'pattern')">Введите корректный e-mail</mat-error>
+            </mat-form-field>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <mat-form-field class="example-full-width">
+              <input matInput [type]="hide ? 'password' : 'text'" placeholder="Пароль" formControlName="password"
+                name="password" id="password" autocomplete="off" required />
+              <mat-error *ngIf="hasError('password', 'required')">Введите пароль</mat-error>
+            </mat-form-field>
+          </td>
+        </tr>
+      </table>      
+    </mat-card-content>
+    <p class="mt-2 mb-2 text-center text-danger" *ngIf="error != null">{{error}}</p>
+    <mat-card-actions class="text-center">
+      <button mat-raised-button color="primary" [disabled]="!loginForm.valid" class="full-width">Войти</button>
+    </mat-card-actions>
+    <a (click)="showForgotPasswordDialog()" class="link-btn">Забыли пароль?</a>
+  </form>
+</mat-card>
+<mat-card class="example-card mt-4 text-center">
+  Ещё нет аккаунта? <a [routerLink]="'/join'">Зарегистрируйтесь</a>
+</mat-card>

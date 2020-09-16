@@ -1,0 +1,16 @@
+.upload-files-container {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.button-container {
+  position: absolute;
+  top: 5;
+  right: 5;
+}
+
+.close-dialog-button {
+  position: absolute;
+  right: 5;
+  top: 5;
+}

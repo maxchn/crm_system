@@ -1,0 +1,15 @@
+mat-sidenav {
+  width: 280px;
+  padding: 15px;
+}
+
+.main-content {
+  padding: 20px;
+  /* border: 2px solid red; */
+  overflow-y: scroll;
+  height: calc(100vh - 64px);
+}
+
+.toolbar-spacer {
+  flex: 1 1 auto;
+}

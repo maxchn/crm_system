@@ -1,0 +1,109 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="example-button-row">
+        <button mat-raised-button color="primary" (click)="showCreateNewFolderDialog()">
+          <mat-icon aria-hidden="false" aria-label="Icon">create_new_folder</mat-icon>
+          Создать папку
+        </button>
+        <button mat-raised-button color="primary" (click)="showUploadFilesDialog()">
+          <mat-icon aria-hidden="false" aria-label="Icon">cloud_upload</mat-icon>
+          Загрузить файл
+        </button>
+        <button *ngIf="selectedFiles.length > 0" mat-raised-button color="primary" (click)="downloadFiles()">
+          <mat-icon aria-hidden="false" aria-label="Icon">cloud_download</mat-icon>
+          Скачать
+        </button>
+        <button *ngIf="selectedFiles.length > 0 && selectedFiles.length < 2" mat-raised-button color="primary"
+          (click)="showRenameFileDialog()">
+          <mat-icon aria-hidden="false" aria-label="Icon">edit</mat-icon>
+          Переименовать
+        </button>
+        <button *ngIf="selectedFiles.length > 0" mat-raised-button color="primary" (click)="deleteFiles()">
+          <mat-icon aria-hidden="false" aria-label="Icon">delete</mat-icon>
+          Удалить
+        </button>
+        <button
+          *ngIf="selectedFiles.length > 0 && selectedFiles.length < 2 && isShowPublicLinkBlock() == false && isFile()"
+          mat-raised-button color="primary" (click)="createPublickLink()">
+          <mat-icon aria-hidden="false" aria-label="Icon">link</mat-icon>
+          Создать публичную ссылку
+        </button>
+        <button *ngIf="selectedFiles.length > 0 && selectedFiles.length < 2 && isShowPublicLinkBlock() == true"
+          mat-raised-button color="primary" (click)="removePublickLink()">
+          <mat-icon aria-hidden="false" aria-label="Icon">link_off</mat-icon>
+          Удалить публичную ссылку
+        </button>
+      </div>
+    </div>
+    <div class="col-md-12" *ngIf="isShowPublicLinkBlock()">
+      <mat-form-field class="mt-2 full-width">
+        <input matInput [formControl]="publicLink" placeholder="Публичная ссылка" [value]="getPublicLink()"
+          (click)="copyToClipboard(getPublicLink())" readonly />
+      </mat-form-field>
+    </div>
+    <div class="col-md-12 mt-3">
+      <ul id="mybreadcrumb">
+        <li *ngFor="let item of breadcrumbItems" (drop)="onDrop($event,item.path)" (dragover)="onAllowDrop($event)"><a
+            class="breadcrumb-link" (click)="goToFolder(item)">{{item.name}}</a>
+        </li>
+      </ul>
+    </div>
+    <div class="col-md-2">
+      <div style="max-width: 300px; overflow-x: auto;">
+        <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" [style.width]="treeWidth">
+          <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding (drop)="onDrop($event,node.path)"
+            (dragover)="onAllowDrop($event)">
+            <button mat-icon-button disabled></button>
+            <span class="file-header" style="max-width: 100px" matTooltip="{{node.item}}">{{node.item}}</span>
+          </mat-tree-node>
+          <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding
+            [matTreeNodePaddingIndent]="threePaddingIndent" (drop)="onDrop($event,node.path)"
+            (dragover)="onAllowDrop($event)">
+            <button mat-icon-button [attr.aria-label]="'toggle ' + node.filename" matTreeNodeToggle>
+              <mat-icon class="mat-icon-rtl-mirror">
+                {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+              </mat-icon>
+            </button>
+            <span class="file-header" style="max-width: 100px" matTooltip="{{node.item}}">{{node.item}}</span>
+            <mat-progress-bar *ngIf="node.isLoading" mode="indeterminate" class="example-tree-progress-bar">
+            </mat-progress-bar>
+          </mat-tree-node>
+        </mat-tree>
+      </div>
+    </div>
+    <div [class]="dropZoneClass" fileDropZone (filesDropped)="handleDrop($event)"
+      (filesHovered)="dropZoneState($event)">
+      <div *ngIf="files.length !== 0; then ifExistsFiles; else ifNoExistsFiles"></div>
+      <ng-template #ifExistsFiles>
+        <div>
+          <div class="file-container" *ngFor="let file of files" (dblclick)="dbClick(file)" matTooltip="{{file.name}}"
+            draggable="true" (dragstart)="onDragStart($event,file)">
+            <div *ngIf="file.fileType === 1; then ifFolder; else ifFile"></div>
+            <ng-template #ifFolder>
+              <a class="folder-link folderItem" (drop)="onDrop($event,file.path)" (dragover)="onAllowDrop($event)">
+                <img src="assets/images/folder.svg" alt="Folder Icon" class="file-icon" />
+                <p class="file-header">{{file.name}}</p>
+              </a>
+              <mat-checkbox class="topright" (change)="checkClick($event.checked, file)"></mat-checkbox>
+            </ng-template>
+            <ng-template #ifFile>
+              <a class="folder-link fileItem" max-width="100%">
+                <img src="assets/images/file.svg" alt="File Icon" class="file-icon" />
+                <p class="file-header">{{file.name}}</p>
+              </a>
+              <mat-checkbox class="topright" (change)="checkClick($event.checked, file)"></mat-checkbox>
+            </ng-template>
+          </div>
+        </div>
+      </ng-template>
+      <ng-template #ifNoExistsFiles>
+        <h4 class="text-center">Нет элементов</h4>
+      </ng-template>
+    </div>
+    <div class="col-md-2 offset-md-10" style="position: fixed; bottom: 20px; right: 0; margin-right: 20px;">
+      <mat-progress-bar mode="determinate" [value]="curCloudSize"></mat-progress-bar>
+      Занято {{getStringSize(cloudSizeInfo.size)}} из {{getStringSize(cloudSizeInfo.maxSize)}}
+    </div>
+  </div>
+</div>

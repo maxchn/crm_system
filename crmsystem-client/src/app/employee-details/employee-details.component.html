@@ -1,0 +1,69 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 mb-3">
+      <button mat-stroked-button routerLink="/employee/index">
+        Назад
+      </button>
+    </div>
+    <div class="col-md-3">
+      <img [src]="imgURL" class="responsive-img" alt="Avatar" *ngIf="imgURL" />
+    </div>
+    <div class="col-md-9">
+      <table>
+        <tr>
+          <td><strong>Общие данные</strong></td>
+        </tr>
+        <tr>
+          <td>ФИО</td>
+          <td>{{ model.lastName }} {{ model.firstName }} {{ model.patronymic }}</td>
+        </tr>
+        <tr>
+          <td>Дата рождения</td>
+          <td>{{ formatDate(model.dateOfBirth) }}</td>
+        </tr>
+        <tr>
+          <td>Пол</td>
+          <td>
+            <div *ngIf="model.gender; then ifGender; else ifNoGender"></div>
+            <ng-template #ifGender>{{ model.gender.name }}</ng-template>
+            <ng-template #ifNoGender> Нет данных </ng-template>
+          </td>
+        </tr>
+        <tr>
+          <td>Отдел</td>
+          <td>
+            <div *ngIf="model.department; then ifDepartment; else ifNoDepartment"></div>
+            <ng-template #ifDepartment>{{ model.department.name }}</ng-template>
+            <ng-template #ifNoDepartment> Нет данных </ng-template>
+          </td>
+        </tr>
+        <tr>
+          <td>Должность</td>
+          <td>
+            <div *ngIf="model.position; then ifPosition; else ifNoPosition"></div>
+            <ng-template #ifPosition>{{ model.position.name }}</ng-template>
+            <ng-template #ifNoPosition> Нет данных </ng-template>
+          </td>
+        </tr>
+        <tr style="height: 50px">
+          <td valign="bottom">
+            <strong>Контактные данные</strong>
+          </td>
+        </tr>
+        <tr>
+          <td>E-mail</td>
+          <td>{{ model.email }}</td>
+        </tr>
+        <tr *ngIf="model.phones && model.phones.length > 0">
+          <td valign="top">Телефоны</td>
+          <td>
+            <div *ngFor="let phone of model.phones">
+              <a href="tel:{{phone.phoneNumber}}">{{phone.phoneNumber}}</a>
+              <br />
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>

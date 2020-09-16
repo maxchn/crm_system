@@ -1,0 +1,103 @@
+import { NgModule } from "@angular/core";
+import { CommonModule } from '@angular/common';
+
+import {
+    MatButtonModule,
+    MatInputModule,
+    MatCheckboxModule,
+    MatProgressSpinnerModule,
+    MatIconModule,
+    MatSidenavModule,
+    MatCardModule,
+    MatDialogModule,
+    MatTableModule,
+    MatToolbarModule,
+    MatMenuModule,
+    MatFormFieldModule,
+    MatListModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatSnackBarModule,
+    MatPaginatorModule,
+    MatTabsModule,
+    MatChipsModule,
+    MatAutocompleteModule,
+    MatTooltipModule,
+    MatDividerModule,
+    MatStepperModule,
+    MatTreeModule,
+    MatBadgeModule
+} from '@angular/material';
+
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+
+@NgModule({
+    imports: [
+        CommonModule,
+        MatButtonModule,
+        MatInputModule,
+        MatCheckboxModule,
+        MatProgressSpinnerModule,
+        MatIconModule,
+        MatSidenavModule,
+        MatCardModule,
+        MatDialogModule,
+        MatTableModule,
+        MatToolbarModule,
+        MatMenuModule,
+        MatFormFieldModule,
+        MatListModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatSelectModule,
+        MatOptionModule,
+        MatSnackBarModule,
+        MatPaginatorModule,
+        MatTabsModule,
+        MatChipsModule,
+        MatAutocompleteModule,
+        MatProgressBarModule,
+        MatTooltipModule,
+        MatDividerModule,
+        DragDropModule,
+        MatStepperModule,
+        MatTreeModule,
+        MatBadgeModule
+    ],
+    exports: [
+        CommonModule,
+        MatButtonModule,
+        MatInputModule,
+        MatCheckboxModule,
+        MatProgressSpinnerModule,
+        MatIconModule,
+        MatSidenavModule,
+        MatCardModule,
+        MatDialogModule,
+        MatTableModule,
+        MatToolbarModule,
+        MatMenuModule,
+        MatFormFieldModule,
+        MatListModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatSelectModule,
+        MatOptionModule,
+        MatSnackBarModule,
+        MatPaginatorModule,
+        MatTabsModule,
+        MatChipsModule,
+        MatAutocompleteModule,
+        MatProgressBarModule,
+        MatTooltipModule,
+        MatDividerModule,
+        MatStepperModule,
+        MatTreeModule,
+        MatBadgeModule
+    ]
+})
+
+export class MaterialDesignModule { }

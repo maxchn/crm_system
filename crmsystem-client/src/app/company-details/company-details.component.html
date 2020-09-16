@@ -1,0 +1,28 @@
+<mat-card>
+  <mat-card-header>
+    <h4>Подробная информация о компании</h4>
+  </mat-card-header>
+  <hr />
+  <dl>
+    <dt>
+      Название компании
+    </dt>
+    <dd class="pl-3">
+      {{model.name}}
+    </dd>
+    <dt>
+      URL адрес компании
+    </dt>
+    <dd class="pl-3">
+      {{model.url}}
+    </dd>
+    <dt>
+      Создатель компании
+    </dt>
+    <dd class="pl-3">
+      {{model.owner}}
+    </dd>
+  </dl>
+  <button *ngIf="isEnableEditCompanyButton" mat-raised-button color="primary"
+    (click)="openEditCompanyDialog()">Редактировать</button>
+</mat-card>

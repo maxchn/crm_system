@@ -1,0 +1,75 @@
+<mat-tab-group mat-align-tabs="start">
+  <mat-tab label="Пригласить по E-mail">
+    <form class="mt-2 mb-2" [formGroup]="invitationForm" autocomplete="off" novalidate>
+      <table class="full-width" cellspacing="0">
+        <tr>
+          <td>
+            <mat-form-field class="full-width">
+              <input matInput type="email" placeholder="E-mail" formControlName="email" name="email" id="email"
+                required />
+              <mat-error *ngIf="hasErrorInvitationForm('email', 'required')">Введите e-mail</mat-error>
+              <mat-error *ngIf="hasErrorInvitationForm('email', 'pattern')">Введите корректный e-mail</mat-error>
+            </mat-form-field>
+          </td>
+        </tr>
+      </table>
+      <div class="form-group text-right">
+        <button mat-button (click)="onCancelClick()">Отмена</button>
+        <button mat-raised-button color="primary" [disabled]="!invitationForm.valid"
+          (click)="sendInvitation()">Пригласить</button>
+      </div>
+    </form>
+  </mat-tab>
+  <mat-tab label="Регистрация">
+    <form class="mt-2 mb-2" [formGroup]="employeeRegisterForm" autocomplete="off" novalidate>
+      <mat-form-field class="full-width">
+        <input matInput type="email" placeholder="E-mail" formControlName="email" name="email" id="email" required />
+        <mat-error *ngIf="hasErrorRegisterForm('email', 'required')">Введите e-mail</mat-error>
+        <mat-error *ngIf="hasErrorRegisterForm('email', 'pattern')">Введите корректный e-mail</mat-error>
+        <mat-error *ngIf="hasErrorRegisterForm('email', 'maxlength')">Максимальное количество символов 256!</mat-error>
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <input matInput type="text" placeholder="Фамилия" formControlName="lastName" name="lastName" id="lastName"
+          required />
+        <mat-error *ngIf="hasErrorRegisterForm('lastName', 'required')">Введите фамилию</mat-error>
+        <mat-error *ngIf="hasErrorRegisterForm('lastName', 'maxlength')">Максимальное количество символов 256!
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <input matInput type="text" placeholder="Имя" formControlName="firstName" name="firstName" id="firstName"
+          required />
+        <mat-error *ngIf="hasErrorRegisterForm('firstName', 'required')">Введите имя</mat-error>
+        <mat-error *ngIf="hasErrorRegisterForm('firstName', 'maxlength')">Максимальное количество символов 256!
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <input matInput type="text" placeholder="Отчество" formControlName="patronymic" name="patronymic"
+          id="patronymic" required />
+        <mat-error *ngIf="hasErrorRegisterForm('patronymic', 'required')">Введите отчество</mat-error>
+        <mat-error *ngIf="hasErrorRegisterForm('patronymic', 'maxlength')">Максимальное количество символов 256!
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <input matInput type="text" placeholder="Отдел" formControlName="department" name="department" id="department"
+          required />
+        <mat-error *ngIf="hasErrorRegisterForm('department', 'required')">Введите отдел</mat-error>
+        <mat-error *ngIf="hasErrorRegisterForm('department', 'maxlength')">Максимальное количество символов 256!
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <input matInput type="text" placeholder="Должность" formControlName="position" name="position" id="position"
+          required />
+        <mat-error *ngIf="hasErrorRegisterForm('position', 'required')">Введите должность</mat-error>
+        <mat-error *ngIf="hasErrorRegisterForm('position', 'maxlength')">Максимальное количество символов 256!
+        </mat-error>
+      </mat-form-field>
+      <mat-checkbox formControlName="isSendLoginPasswordOnEmail">Отправить логин и пароль на указанный e-mail?
+      </mat-checkbox>
+      <div class="form-group text-right">
+        <button mat-button (click)="onCancelClick()">Отмена</button>
+        <button mat-raised-button color="primary" [disabled]="!employeeRegisterForm.valid"
+          (click)="registerEmployee()">Добавить</button>
+      </div>
+    </form>
+  </mat-tab>
+</mat-tab-group>

@@ -1,0 +1,108 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 mb-3">
+      <button mat-raised-button color="primary" (click)="showPrivateMessageDialog()">
+        <mat-icon aria-hidden="false" aria-label="Icon">add_alert</mat-icon>
+        Создать сообщение
+      </button>
+    </div>
+    <div class="col-md-8">
+      <mat-card *ngFor="let employee of birthDayNotifications" class="birthDayNotification mb-3">
+        <a [routerLink]="['/employee/details', employee.id]">{{employee.lastName}} {{employee.firstName}}
+          {{employee.patronymic}}</a> сегодня празднует День Рождения
+      </mat-card>
+
+      <div *ngFor="let notification of notifications">
+        <mat-card *ngIf="notification.type == 1" class="taskNotification mb-3">
+          <p class="small-header">{{getFormatDateTime(notification.data.dateTime)}}</p>
+          <a [routerLink]="['/employee/details', notification.data.author.id]">{{notification.data.author.lastName}}
+            {{notification.data.author.firstName}}
+            {{notification.data.author.patronymic}}</a> {{getTaskNotificationTypeText(notification.data.type)}}
+          <a [routerLink]="['/task/details', notification.data.task.taskId]">{{notification.data.task.name}}</a>
+        </mat-card>
+
+        <mat-card *ngIf="notification.type == 2" class="companyNotification mb-3">
+
+          <div
+            *ngIf="(notification.data.newEmployee == null || notification.data.newEmployee) == undefined; then ifHtmlBody; else ifNoHtmlBody">
+          </div>
+          <ng-template #ifHtmlBody>
+            <p class="small-header">{{getFormatDateTime(notification.data.dateTime)}}</p>
+            <a [routerLink]="['/employee/details', notification.data.author.id]">{{notification.data.author.lastName}}
+              {{notification.data.author.firstName}}
+              {{notification.data.author.patronymic}}</a>
+            <div [innerHTML]="notification.data.body"></div>
+          </ng-template>
+          <ng-template #ifNoHtmlBody>
+            <p class="small-header">{{getFormatDateTime(notification.data.dateTime)}}</p>
+            К компании присоединился новый сотрудник
+            <a [routerLink]="['/employee/details', notification.data.newEmployee.id]">{{notification.data.newEmployee.lastName}}
+              {{notification.data.newEmployee.firstName}}
+              {{notification.data.newEmployee.patronymic}}</a>
+          </ng-template>
+        </mat-card>
+
+        <mat-card *ngIf="notification.type == 3" class="privateNotification mb-3">
+          <p class="small-header">{{getFormatDateTime(notification.data.dateTime)}}</p>
+          <a [routerLink]="['/employee/details', notification.data.author.id]">{{notification.data.author.lastName}}
+            {{notification.data.author.firstName}} {{notification.data.author.patronymic}}</a>
+          <div [innerHTML]="notification.data.body"></div>
+
+          <div class="buttons-group text-right">
+            <button *ngIf="getPermissionOnPrivateNotification(notification.data.author.id)" mat-icon-button
+              matTooltip="Редактировать" color="accent" (click)="editPrivateNotification(notification.data)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button *ngIf="getPermissionOnPrivateNotification(notification.data.author.id)" mat-icon-button
+              matTooltip="Удалить" color="warn"
+              (click)="deletePrivateNotification(notification.data.privateNotificationId)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <mat-card class="mb-3">
+        <p class="text-center font-weight-bold">Ваша статистика</p>
+        <hr />
+        <mat-card class="birthDayNotification mb-3">
+          Выполняю: <span class="custom-badge">{{taskStatistics.countTasksAsResponsible}}</span>
+        </mat-card>
+        <mat-card class="birthDayNotification mb-3">
+          Помогаю: <span class="custom-badge">{{taskStatistics.countTasksAsCoExecutor}}</span>
+        </mat-card>
+        <mat-card class="birthDayNotification mb-3">
+          Наблюдаю: <span class="custom-badge">{{taskStatistics.countTasksAsObserver}}</span>
+        </mat-card>
+        <mat-card class="birthDayNotification mb-3">
+          Поручил: <span class="custom-badge">{{taskStatistics.countTasksAsAuthor}}</span>
+        </mat-card>
+        <mat-card class="birthDayNotification mb-3">
+          Выполненые: <span class="custom-badge">{{taskStatistics.countCompletedTasks}}</span>
+        </mat-card>
+        <mat-card class="birthDayNotification mb-3">
+          Просроченные: <span class="custom-badge">{{taskStatistics.countOverdueTasks}}</span>
+        </mat-card>
+      </mat-card>
+      <mat-card class="mb-3">
+        <p class="text-center font-weight-bold">Cтатистика компании</p>
+        <hr />
+        <mat-card class="birthDayNotification mb-3">
+          Кол-во задач за месяц требующих выполнения: <span
+            class="custom-badge">{{taskStatistics.countTasksOutstandingPerMonth}}</span>
+        </mat-card>
+        <mat-card class="birthDayNotification mb-3">
+          Кол-во выданных задач за месяц: <span class="custom-badge">{{taskStatistics.countIssuedTasksPerMonth}}</span>
+        </mat-card>
+        <div class="text-center" style="position: relative">
+          <span>% выполненных задач за месяц:</span>
+          <mat-progress-spinner color="primary" mode="determinate" [value]="calcPercentTasksCompleted()"
+            class="spinner-center">
+          </mat-progress-spinner>
+          <span style="position: absolute; top: calc(50%); left: calc(50% - 19px);">{{calcPercentTasksCompleted()}}%</span>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+</div>

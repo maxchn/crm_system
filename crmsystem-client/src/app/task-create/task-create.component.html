@@ -1,0 +1,178 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <button mat-stroked-button routerLink="/task/index">Назад</button>
+
+      <form [formGroup]="form" novalidate class="mt-5">
+        <mat-form-field class="full-width">
+          <input matInput type="text" placeholder="Название задачи" formControlName="name" name="name" id="name"
+            required />
+          <mat-error *ngIf="hasError('name', 'required')">Поле обязательное</mat-error>
+          <mat-error *ngIf="hasError('name', 'maxlength')">Максимальное количество символов 120!</mat-error>
+        </mat-form-field>
+        <p>Описание задачи <span class="text-danger">*</span></p>
+        <ckeditor #bodyEditor [editor]="Editor" [data]="taskBody"></ckeditor>
+        <p *ngIf="isEmptyBody" class="text-danger">
+          Поле обязательное
+        </p>
+        <label>Крайний срок</label>
+        <br>
+        <mat-form-field>
+          <mat-label>Дата</mat-label>
+          <input matInput formControlName="deadlineDate" [matDatepicker]="deadlineDate" [min]="minDate" [max]="maxDate"
+            required readonly>
+          <mat-datepicker-toggle matSuffix [for]="deadlineDate"></mat-datepicker-toggle>
+          <mat-datepicker #deadlineDate disabled="false" required></mat-datepicker>
+          <mat-error *ngIf="hasError('deadlineDate', 'required') || hasError('deadlineDate', 'isEmpty')">
+            Поле обязательное
+          </mat-error>
+        </mat-form-field>        
+        <br>
+        <br>
+        <mat-checkbox formControlName="isImportant">
+          Это важная задача
+          <mat-icon svgIcon="whatshot" aria-hidden="false" aria-label="It is important"></mat-icon>
+        </mat-checkbox>
+        <br>
+        <mat-form-field class="full-width">
+          <mat-chip-list #responsibleForExecutionChipList aria-label="Fruit selection">
+            <mat-chip *ngFor="let employee of selectedResponsiblesArray" [selectable]="selectable"
+              [removable]="removable" (removed)="removeResponsibleForExecution(employee)">
+              {{employee.lastName}} {{employee.firstName}} {{employee.patronymic}}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <input placeholder="Ответственные" #responsibleForExecutionInput formControlName="responsibleForExecution"
+              [matAutocomplete]="auto1" [matChipInputFor]="responsibleForExecutionChipList"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+              (matChipInputTokenEnd)="addResponsibleForExecution($event)">
+          </mat-chip-list>
+          <mat-autocomplete #auto1="matAutocomplete" (optionSelected)="selectedResponsibleForExecution($event)">
+            <mat-option *ngFor="let employee of filteredResponsibleForExecution | async" [value]="employee.id">
+              {{employee.lastName}} {{employee.firstName}} {{employee.patronymic}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <mat-error *ngIf="selectedResponsiblesArray.length == 0">
+          Укажите как минимум одного ответственного
+        </mat-error>
+        <mat-form-field class="full-width">
+          <mat-chip-list #coExecutorChipList aria-label="Fruit selection">
+            <mat-chip *ngFor="let employee of selectedCoExecutorArray" [selectable]="selectable" [removable]="removable"
+              (removed)="removeCoExecutor(employee)">
+              {{employee.lastName}} {{employee.firstName}} {{employee.patronymic}}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <input placeholder="Соисполнители" #coExecutorInput formControlName="coExecutor" [matAutocomplete]="auto2"
+              [matChipInputFor]="coExecutorChipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addCoExecutor($event)">
+          </mat-chip-list>
+          <mat-autocomplete #auto2="matAutocomplete" (optionSelected)="selectedCoExecutor($event)">
+            <mat-option *ngFor="let employee of filteredCoExecutor | async" [value]="employee.id">
+              {{employee.lastName}} {{employee.firstName}} {{employee.patronymic}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+          <mat-chip-list #observerChipList aria-label="Fruit selection">
+            <mat-chip *ngFor="let employee of selectedObserverArray" [selectable]="selectable" [removable]="removable"
+              (removed)="removeObserver(employee)">
+              {{employee.lastName}} {{employee.firstName}} {{employee.patronymic}}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <input placeholder="Наблюдатели" #observerInput formControlName="observer" [matAutocomplete]="auto3"
+              [matChipInputFor]="observerChipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addObserver($event)">
+          </mat-chip-list>
+          <mat-autocomplete #auto3="matAutocomplete" (optionSelected)="selectedObserver($event)">
+            <mat-option *ngFor="let employee of filteredObserver | async" [value]="employee.id">
+              {{employee.lastName}} {{employee.firstName}} {{employee.patronymic}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+          <mat-chip-list #chipList aria-label="Fruit selection">
+            <mat-chip *ngFor="let tag of allTags" [selectable]="selectable" [removable]="removable"
+              (removed)="removeTag(tag)">
+              {{tag.name}}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <input placeholder="Теги" #tagInput [formControl]="tagCtrl" [matChipInputFor]="chipList"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+              (matChipInputTokenEnd)="addTag($event)">
+          </mat-chip-list>
+        </mat-form-field>
+
+        <br />
+
+        <div class="row">
+          <div class="col">
+            <hr>
+            <p>Список прикрепленных файлов</p>
+            <hr>
+            <mat-selection-list #shoes>
+              <mat-list-option *ngFor="let file of attachedFiles" [value]="file">
+                {{file.name}}
+              </mat-list-option>
+            </mat-selection-list>
+            <p>
+              Выбрано файлов: {{shoes.selectedOptions.selected.length}}
+            </p>
+            <button *ngIf="shoes.selectedOptions.selected.length > 0" mat-raised-button color="warn"
+              (click)="deleteAttachedFiles(shoes.selectedOptions.selected)">
+              <mat-icon aria-hidden="false" aria-label="Icon">delete</mat-icon>
+              Удалить
+            </button>
+          </div>
+          <div class="col">
+            <hr />
+            <p>Выбрать с устройства</p>
+            <hr />
+            <input type="file" name="files" class="mt-1 mb-1" (change)="preview($event)"
+              data-button-title="Выберите файл(-ы)" multiple="multiple" />
+            <hr />
+            <p>Выбрать с облачного хранилища</p>
+            <hr />
+            <div style="max-width: 100%; overflow-x: auto;">
+              <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" [style.width]="treeWidth">
+                <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding
+                  [matTreeNodePaddingIndent]="threePaddingIndent">
+                  <button mat-icon-button disabled style="width: 16px"></button>
+                  <mat-checkbox class="checklist-leaf-node file-header" style="max-width: 100px;"
+                    (change)="selectFileItemSelectionToggle($event.checked, node)" [checked]="nodeSelected(node)"
+                    matTooltip="{{node.item}}">
+                    {{node.item}}</mat-checkbox>
+                </mat-tree-node>
+
+                <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding
+                  [matTreeNodePaddingIndent]="threePaddingIndent">
+                  <button mat-icon-button [attr.aria-label]="'toggle ' + node.filename" matTreeNodeToggle>
+                    <mat-icon class="mat-icon-rtl-mirror">
+                      {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                    </mat-icon>
+                  </button>
+                  <span class="file-header" style="max-width: 100px" matTooltip="{{node.item}}">{{node.item}}</span>
+                  <mat-progress-bar *ngIf="node.isLoading" mode="indeterminate" class="example-tree-progress-bar">
+                  </mat-progress-bar>
+                </mat-tree-node>
+              </mat-tree>
+            </div>
+            <button *ngIf="selectedFilesFromCloud.length > 0" mat-raised-button color="primary"
+              (click)="addSelectedFilesFromCloud()">
+              <mat-icon aria-hidden="false" aria-label="Icon">add</mat-icon>
+              Добавить в список
+            </button>
+          </div>
+        </div>
+
+        <br />
+        <br />
+
+        <div class="form-group text-right">
+          <button mat-raised-button color="primary" (click)="changeTask()">{{actionButtonText}}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
